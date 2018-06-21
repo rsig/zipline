@@ -17,6 +17,7 @@ module Zipline
       fake_io_writer = ZipTricks::BlockWrite.new(&block)
       ZIPLINE_LOGGER.info "Inside each:initialize: #{@files.size}"
       ZipTricks::Streamer.open(fake_io_writer) do |streamer|
+        ZIPLINE_LOGGER.info "Inside each:initialize1: #{@files.size}"
         @files.each {|file, name| handle_file(streamer, file, name) }
       end
     end
