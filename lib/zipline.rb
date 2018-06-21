@@ -12,6 +12,7 @@ require "zipline/zip_generator"
 #   end
 # end
 module Zipline
+ZIPLINE_LOGGER              = Logger.new("log/zipline.log")
   def zipline(files, zipname = 'zipline.zip')
     zip_generator = ZipGenerator.new(files)
     headers['Content-Disposition'] = "attachment; filename=\"#{zipname.gsub '"', '\"'}\""
