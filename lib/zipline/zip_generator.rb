@@ -5,6 +5,7 @@ module Zipline
     # takes an array of pairs [[uploader, filename], ... ]
     def initialize(files)
       @files = files
+      ZIPLINE_LOGGER.info "initialize: #{files.size}"
     end
 
     #this is supposed to be streamed!

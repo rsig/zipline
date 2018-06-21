@@ -14,6 +14,7 @@ require "zipline/zip_generator"
 module Zipline
 ZIPLINE_LOGGER              = Logger.new("log/zipline.log")
   def zipline(files, zipname = 'zipline.zip')
+    ZIPLINE_LOGGER.info "zipline files: #{files.size}"
     zip_generator = ZipGenerator.new(files)
     headers['Content-Disposition'] = "attachment; filename=\"#{zipname.gsub '"', '\"'}\""
     headers['Content-Type'] = Mime::Type.lookup_by_extension('zip').to_s
