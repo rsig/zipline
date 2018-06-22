@@ -90,7 +90,8 @@ module Zipline
           end
           c.perform
         elsif file[:file]
-          ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]} path = #{file[:file].absolute_path}"
+          #ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]} path = #{file[:file].absolute_path}"
+          ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]}"
           IO.copy_stream(file[:file], writer_for_file)
           file[:file].close
         else
