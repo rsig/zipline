@@ -92,12 +92,12 @@ module Zipline
           c.perform
         elsif file[:file]
           #ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]} path = #{file[:file].absolute_path}"
-          ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]}"
-          bytes_expected = file[:file].meta['content-length']
+          #bytes_expected = file[:file].meta['content-length']
           bytes_copied = IO.copy_stream(file[:file], writer_for_file)
-          if bytes_expected != bytes_copied
-            raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
-          end
+          ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]} bytes_copied = #{bytes_copied}"
+          #if bytes_expected != bytes_copied
+        #    raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
+        #  end
           file[:file].close
         else
           ZIPLINE_LOGGER.info "File: #{file[:file]}"
