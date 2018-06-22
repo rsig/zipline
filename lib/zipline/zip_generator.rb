@@ -78,7 +78,6 @@ module Zipline
 
     def write_file(streamer, file, name)
       ZIPLINE_LOGGER.info "write_file #{@iterator}: #{file} #{name}"
-      @iterator = @iterator + 1
       streamer.write_deflated_file(name) do |writer_for_file|
         if file[:url]
           the_remote_url = file[:url]
@@ -95,6 +94,7 @@ module Zipline
           #bytes_expected = file[:file].meta['content-length']
           bytes_copied = IO.copy_stream(file[:file], writer_for_file)
           ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]} bytes_copied = #{bytes_copied}"
+          @iterator = @iterator + 1
           #if bytes_expected != bytes_copied
         #    raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
         #  end
