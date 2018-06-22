@@ -51,7 +51,7 @@ module Zipline
         ZIPLINE_LOGGER.info "CarrierWave::SanitizedFile"
         {file: File.open(file.path)}
       elsif is_io?(file)
-        ZIPLINE_LOGGER.info "is_io"
+        ZIPLINE_LOGGER.info "normalize:is_io"
         {file: file}
       elsif defined?(ActiveStorage::Blob) && file.is_a?(ActiveStorage::Blob)
         ZIPLINE_LOGGER.info "ActiveStorage::Blob"
