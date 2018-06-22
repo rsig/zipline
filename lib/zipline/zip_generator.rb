@@ -1,6 +1,7 @@
 # this class acts as a streaming body for rails
 # initialize it with an array of the files you want to zip
 module Zipline
+  require 'open-uri'
   class ZipGenerator
     # takes an array of pairs [[uploader, filename], ... ]
     def initialize(files)
@@ -92,7 +93,11 @@ module Zipline
         elsif file[:file]
           #ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]} path = #{file[:file].absolute_path}"
           ZIPLINE_LOGGER.info "write_file-File #{@iterator}: #{file[:file]}"
-          IO.copy_stream(file[:file], writer_for_file)
+          bytes_expected = file[:file].meta['content-length']
+          bytes_copied = IO.copy_stream(file[:file], writer_for_file)
+          if bytes_expected != bytes_copied
+            raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
+          end
           file[:file].close
         else
           ZIPLINE_LOGGER.info "File: #{file[:file]}"
