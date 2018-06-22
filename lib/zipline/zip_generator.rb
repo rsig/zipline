@@ -5,6 +5,7 @@ module Zipline
     # takes an array of pairs [[uploader, filename], ... ]
     def initialize(files)
       @files = files
+      @iterator = 0
       ZIPLINE_LOGGER.info "initialize: #{files.size}"
     end
 
@@ -15,12 +16,12 @@ module Zipline
 
     def each(&block)
       fake_io_writer = ZipTricks::BlockWrite.new(&block)
-      ZIPLINE_LOGGER.info "Inside each:initialize: #{@files.size}"
       ZipTricks::Streamer.open(fake_io_writer) do |streamer|
-        ZIPLINE_LOGGER.info "Inside each:initialize1: #{@files.size}"
+        @iterator = 0
         @files.each {|file, name|
-          ZIPLINE_LOGGER.info "Calling handle_file"
+          ZIPLINE_LOGGER.info "Calling handle_file size = #{@files.size}"
           handle_file(streamer, file, name) }
+          @iterator = 0
       end
     end
 
@@ -54,7 +55,7 @@ module Zipline
         ZIPLINE_LOGGER.info "CarrierWave::SanitizedFile"
         {file: File.open(file.path)}
       elsif is_io?(file)
-        ZIPLINE_LOGGER.info "normalize:is_io"
+        ZIPLINE_LOGGER.info "normalize:is_io file = #{file}"
         {file: file}
       elsif defined?(ActiveStorage::Blob) && file.is_a?(ActiveStorage::Blob)
         ZIPLINE_LOGGER.info "ActiveStorage::Blob"
@@ -75,7 +76,8 @@ module Zipline
     end
 
     def write_file(streamer, file, name)
-      ZIPLINE_LOGGER.info "write_file: #{file} #{name}"
+      ZIPLINE_LOGGER.info "write_file #{@iterator}: #{file} #{name}"
+      @iterator = @iterator + 1
       streamer.write_deflated_file(name) do |writer_for_file|
         if file[:url]
           the_remote_url = file[:url]
