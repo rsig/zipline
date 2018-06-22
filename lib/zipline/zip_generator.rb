@@ -18,7 +18,9 @@ module Zipline
       ZIPLINE_LOGGER.info "Inside each:initialize: #{@files.size}"
       ZipTricks::Streamer.open(fake_io_writer) do |streamer|
         ZIPLINE_LOGGER.info "Inside each:initialize1: #{@files.size}"
-        @files.each {|file, name| handle_file(streamer, file, name) }
+        @files.each {|file, name|
+          ZIPLINE_LOGGER.info "Calling handle_file"
+          handle_file(streamer, file, name) }
       end
     end
 
@@ -31,6 +33,7 @@ module Zipline
     # Currently support carrierwave and paperclip local and remote storage.
     # returns a hash of the form {url: aUrl} or {file: anIoObject}
     def normalize(file)
+      ZIPLINE_LOGGER.info "inside normalise"
       if defined?(CarrierWave::Uploader::Base) && file.is_a?(CarrierWave::Uploader::Base)
         ZIPLINE_LOGGER.info "CarrierWave::Uploader::Base"
         file = file.file
